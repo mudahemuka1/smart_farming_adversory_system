@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "smart-farming-advisory-api",
+		"name": "Smart Farming Advisory API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Signup (Farmer)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"farmer_john@example.com\",\n    \"password\": \"password123\",\n    \"role\": \"FARMER\",\n    \"fullName\": \"John Doe\",\n    \"location\": \"Rwamagana\",\n    \"contactNumber\": \"0780000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/auth/signup"
+					}
+				},
+				{
+					"name": "Signup (Agronomist)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"agronomist_eric@example.com\",\n    \"password\": \"pass456\",\n    \"role\": \"AGRONOMIST\",\n    \"fullName\": \"Eric Bizimana\",\n    \"specialization\": \"Crops and Soil\",\n    \"contactNumber\": \"0781111111\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/auth/signup"
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"farmer_john@example.com\",\n    \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/auth/login"
+					}
+				}
+			]
+		},
+		{
+			"name": "Advisory",
+			"item": [
+				{
+					"name": "Get Crop Recommendation",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/crops/recommend?soil=Loam&season=Summer",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "crops", "recommend"],
+							"query": [
+								{ "key": "soil", "value": "Loam" },
+								{ "key": "season", "value": "Summer" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Ask Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "My maize leaves are turning yellow. What should I do?",
+							"options": {
+								"raw": { "language": "text" }
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/questions?farmerId=1&title=Yellow Leaves",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "questions"],
+							"query": [
+								{ "key": "farmerId", "value": "1" },
+								{ "key": "title", "value": "Yellow Leaves" }
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "id": 20,
+    "email": "mudahemukafifi@gmail.com",
+    "role": "FARMER",
+    "is_verified": {
+      "type": "Buffer",
+      "data": [
+        1
+      ]
+    },
+    "password": "$2a$10$TZ1KkD2Fzm4VT21xC2.WV.XMikjYzRUbrySOR/lluCdtOfDIe868W"
+  },
+  {
+    "id": 21,
+    "email": "mudahemukafidela90@gmail.com",
+    "role": "ADMIN",
+    "is_verified": {
+      "type": "Buffer",
+      "data": [
+        1
+      ]
+    },
+    "password": "$2a$10$mwkq988rmsDhWULe.9khZeblKGe1MmVaTha3UTCkXHZAocU5PCpje"
+  },
+  {
+    "id": 22,
+    "email": "mudahemukafidela420@gmail.com",
+    "role": "AGRO_DEALER",
+    "is_verified": {
+      "type": "Buffer",
+      "data": [
+        1
+      ]
+    },
+    "password": "$2a$10$CL5Vo.12xijZJikNkzovnOIZY/.aDlmYfL.k/OHK5IL/mq3Q8JjIK"
+  }
+]

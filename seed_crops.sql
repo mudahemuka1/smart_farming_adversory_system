@@ -1,0 +1,35 @@
+USE smartfarming;
+
+DELETE FROM Crop;
+
+INSERT INTO Crop (name, description, suitable_soil_type, suitable_season, growing_duration_days, full_texts) VALUES
+('Maize (Ibigori)', 'A key cereal crop used for food and animal feed across Rwanda.', 'Loamy', 'Season A & B', 120, 'Plant with DAP and top-dress with Urea after 4 weeks for maximum yield.'),
+('Climbing Beans', 'The primary protein source for Rwandans, maximizing space vertically.', 'Loamy', 'Season A & B', 90, 'Use strong stakes for support and ensure regular weeding during the first month.'),
+('Irish Potatoes', 'A major food and cash crop grown primarily in the volcanic North.', 'Volcanic', 'Season A', 110, 'Use certified seeds and mulch to maintain moisture in the tuber zone.'),
+('Cassava', 'A drought-resistant root crop essential for food security in the East.', 'Sandy Loam', 'All seasons', 360, 'Plant during the rainy season to establish roots before the dry spell begins.'),
+('Rice', 'A marshland crop requiring significant water and temperature control.', 'Clay', 'Season B', 150, 'Maintain shallow water levels and control weeds manually or with herbicides.'),
+('Sweet Potatoes', 'A nutritious tuber that serves as a reliable food security crop.', 'Sandy Loam', 'Season A & B', 120, 'Plant on mounds or ridges to facilitate large tuber development and drainage.'),
+('Sorghum', 'A traditional cereal used for brewing and as a nutritious porridge.', 'Loamy', 'Season A', 180, 'Thin the plants early to ensure enough space for large head formation.'),
+('Wheat', 'A cool-climate cereal grown in high-altitude regions like Gicumbi.', 'Loamy', 'Season A', 120, 'Apply phosphorus at planting and protect the crop from birds during ripening.'),
+('Soybean', 'A high-protein legume used for oil production and animal feed.', 'Loamy', 'Season B', 120, 'Innoculate seeds with rhizobium to improve nitrogen fixation and soil health.'),
+('Peas', 'A high-altitude legume often grown as a rotation crop.', 'Loamy', 'Season A', 90, 'Harvest when pods are firm but before they turn yellow and dry.'),
+('Coffee', 'Rwanda\'s leading export crop known for its high-quality Arabica.', 'Volcanic', 'All seasons', 1000, 'Practice regular pruning and mulching to maintain tree productivity and health.'),
+('Tea', 'A major export crop grown in high-rainfall mountain areas.', 'Acidic Loam', 'All seasons', 1000, 'Feed with specialized NPK fertilizers and pluck two leaves and a bud every 10 days.'),
+('Pyrethrum', 'A natural insecticide source grown near the Volcanoes National Park.', 'Volcanic', 'All seasons', 365, 'Dry the flowers immediately after picking to preserve the pyrethrin content.'),
+('Cabbage', 'A popular leafy vegetable grown in many smallholder gardens.', 'Loamy', 'All seasons', 90, 'Nurse seeds for 4 weeks before transplanting into heavily manured beds.'),
+('Tomatoes', 'A high-value vegetable often grown in greenhouses or valley bottoms.', 'Loamy', 'All seasons', 110, 'Stake the plants to prevent fruit rot and apply fungicides against early blight.'),
+('Onions', 'A staple spice grown for both local consumption and trade.', 'Loamy', 'Season C', 100, 'Cure the bulbs in the sun for a few days after harvest to improve shelf life.'),
+('Carrots', 'A vitamin-rich root vegetable grown in the Northern highlands.', 'Sandy Loam', 'All seasons', 80, 'Thin seedlings early to prevent overcrowding and ensure straight, thick roots.'),
+('Peppers (Pavuro)', 'Sweet and chili peppers grown for urban markets and export.', 'Loamy', 'Season B', 100, 'Water consistently at the base to avoid leaf diseases and fruit drop.'),
+('Eggplant', 'A versatile vegetable used in various traditional Rwandan stews.', 'Loamy', 'Season A', 120, 'Start in a nursery and transplant into deep, well-drained soil with organic matter.'),
+('Garlic', 'A high-value spice with medicinal properties grown in small plots.', 'Loamy', 'Season A', 120, 'Plant individual cloves 5cm deep and mulch heavily to control weed growth.'),
+('Pineapple', 'A tropical fruit grown in low-altitude regions like Bugesera.', 'Sandy Loam', 'All seasons', 540, 'Use suckers for planting and apply potassium-rich fertilizer for sweeter fruit.'),
+('Passion Fruit', 'A popular juice fruit grown on trellises in mid-altitude zones.', 'Loamy', 'All seasons', 300, 'Train vines on wires and prune regularly to manage pests and maximize fruit.'),
+('Avocado', 'A widely grown fruit tree providing nutritious fats to the diet.', 'Loamy', 'All seasons', 1400, 'Graft trees for faster production and protect young seedlings from direct sun.'),
+('Mangoes', 'A seasonal fruit tree thriving in the hotter Eastern Province.', 'Sandy Loam', 'Season B', 1500, 'Prune the canopy to allow sunlight into the center and prevent fungal diseases.'),
+('Bananas (Matooke)', 'The primary staple food across many central and eastern regions.', 'Loamy', 'All seasons', 365, 'Maintain three plants per stool (mother, daughter, granddaughter) for continuous yield.'),
+('Sunflower', 'An oilseed crop that is relatively easy to grow in drier areas.', 'Loamy', 'Season B', 120, 'Protect the ripening heads from birds using nets or traditional scaring methods.'),
+('Macadamia', 'An emerging high-value export nut for commercial growers.', 'Loamy', 'All seasons', 2000, 'Space trees widely and ensure consistent watering during the first few years.'),
+('Stevia', 'A natural sweetener crop grown under contract for export.', 'Loamy', 'All seasons', 100, 'Harvest the leaves regularly to encourage bushier growth and higher yields.'),
+('Oranges', 'A citrus fruit grown in subtropical valley locations like Rusizi.', 'Loamy', 'All seasons', 1500, 'Watch for aphids and scale insects, and apply organic pesticides when necessary.'),
+('Papaya', 'A fast-growing fruit tree that provides yield within its first year.', 'Loamy', 'All seasons', 300, 'Avoid waterlogged soil as papayas are very sensitive to root rot.');

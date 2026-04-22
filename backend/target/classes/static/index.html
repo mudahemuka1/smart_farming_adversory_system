@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>smart_farming | Unified Expert Advisory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #064e3b; --secondary: #10b981; --bg: #f8fafc; --text: #1e293b; }
+        * { margin:0; padding:0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        
+        body { background: var(--bg); color: var(--text); line-height: 1.6; }
+
+        /* Navbar */
+        nav {
+            padding: 20px 80px; display: flex; justify-content: space-between; align-items: center;
+            background: white; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .brand { font-size: 1.6rem; font-weight: 800; color: var(--primary); text-decoration: none; }
+        .nav-links a { color: var(--text); text-decoration: none; margin-left: 30px; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--secondary); }
+
+        /* Hero / Introduction */
+        .hero {
+            height: 90vh; background: linear-gradient(rgba(6, 78, 59, 0.8), rgba(6, 78, 59, 0.8)), url('assets/hero.png') no-repeat center center/cover;
+            display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding-top: 80px;
+        }
+        .hero-content { max-width: 900px; padding: 0 40px; }
+        .hero-content h1 { font-size: 4.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 25px; letter-spacing: -2px; }
+        .hero-content p { font-size: 1.3rem; opacity: 0.9; margin-bottom: 40px; }
+        .btn-cta { padding: 18px 45px; background: var(--secondary); color: white; border-radius: 16px; font-weight: 800; text-decoration: none; font-size: 1.1rem; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); }
+
+        /* Sections */
+        section { padding: 100px 80px; }
+        .section-title { font-size: 2.5rem; color: var(--primary); font-weight: 800; margin-bottom: 30px; text-align: center; }
+        
+        /* Login Card Wrapper */
+        .login-wrap { background: white; padding: 100px 0; display: flex; justify-content: center; }
+        .auth-card {
+            background: #f8fafc; padding: 50px; border-radius: 32px; width: 100%; max-width: 500px;
+            border: 1px solid #e2e8f0;
+        }
+
+        input { width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 16px; margin-bottom: 15px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--secondary); }
+        .btn-primary { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 16px; font-weight: 700; font-size: 1.1rem; cursor: pointer; }
+
+        /* Content Blocks */
+        .content-block { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .img-placeholder { background: #e2e8f0; height: 350px; border-radius: 32px; }
+
+        /* Footer Credits */
+        footer { background: #111827; color: white; padding: 60px 80px; text-align: center; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="brand">☘️ smart_farming</a>
+        <div class="nav-links">
+            <a href="#">HOME</a>
+            <a href="#about">ABOUT</a>
+            <a href="#experts">EXPERTS</a>
+            <a href="#contact">CONTACT</a>
+            <a href="#login" style="color: var(--secondary);">LOGIN</a>
+        </div>
+    </nav>
+
+    <!-- MEGA INTRODUCTION HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <p style="font-weight: 800; color: #34d399; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">Official Advisory Portal</p>
+            <h1>Leading Smart Farming Technology in 2026.</h1>
+            <p>Our project provides precision crop recommendations and expert-led troubleshooting to ensure maximum productivity for every Rwandan farmer.</p>
+            <a href="#login" class="btn-cta">Access Portal</a>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about">
+        <div class="content-block">
+            <div class="text-area">
+                <h2 class="section-title" style="text-align: left;">About the Mission</h2>
+                <p>The Smart Farming Advisory System is built to eliminate agricultural risk. By analyzing detailed soil profiles and institutional data, we help farmers choose exactly which seeds to plant and when.</p>
+                <p>This system uses cutting-edge Java backend logic to process agricultural rules in real-time.</p>
+            </div>
+            <div class="img-placeholder" style="background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">[ Intelligent Data Model ]</div>
+        </div>
+    </section>
+
+    <!-- EXPERTS SECTION -->
+    <section id="experts" style="background: white;">
+        <div class="content-block">
+            <div class="img-placeholder"></div>
+            <div class="text-area">
+                <h2 class="section-title" style="text-align: left;">Ask Questions</h2>
+                <p>Our platform is home to a global network of Agronomists. Any problem you face—from disease to pests—can be resolved by posting a simple consultation request and getting answers to your questions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOGIN SECTION -->
+    <section id="login" class="login-wrap">
+        <div class="auth-card">
+            <h2 style="text-align: center; margin-bottom: 25px; color: var(--primary); font-weight: 800;">Portal Login</h2>
+            <div id="errorBox" style="background:#fee2e2; color:#b91c1c; padding:12px; border-radius:12px; margin-bottom:15px; display:none; text-align:center; font-weight:700;"></div>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" class="btn-primary">Login Now</button>
+            </form>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                Need an account? <a href="signup.html" style="color:var(--primary); font-weight:800; text-decoration:none;">Sign Up</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- CONTACT / FOOTER -->
+    <footer id="contact">
+        <h2 style="color: var(--secondary); margin-bottom: 10px;">SMART_FARMING SYSTEM</h2>
+        <p>Providing precision agriculture solutions.</p>
+        <div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p style="margin-top: 30px; opacity: 0.6; font-size: 0.8rem;">© 2026 smart_farming - Kigali, Rwanda</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
