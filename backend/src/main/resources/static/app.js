@@ -124,9 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchPendingQuestions();
         } else if (user.role === 'FARMER') {
             document.getElementById('navFarmer').style.display = 'block';
+            document.getElementById('systemOverviewCard').style.display = 'none';
+            document.getElementById('farmerDashboard').style.display = 'block';
             fetchMyQuestions();
             fetchAgroDealers();
             fetchCropGuide();
+            fetchFarmerOverview();
         } else if (user.role === 'AGRO_DEALER') {
             document.getElementById('navAgroDealer').style.display = 'block';
             fetchDealerProfile();
@@ -154,6 +157,45 @@ function showSection(id) {
 }
 
 // --- Farmer Actions ---
+async function fetchFarmerOverview() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    try {
+        const resQ = await fetch(`${API_BASE}/questions/farmer/${user.id}`, { headers: { 'Authorization': `Bearer ${user.token}` } });
+        const dataQ = await resQ.json();
+        const overviewQuestions = document.getElementById('overviewMyQuestions');
+        if (overviewQuestions) {
+            overviewQuestions.innerHTML = dataQ.length === 0 ? '<p style="color: #6b7280;">No questions asked yet.</p>' : dataQ.map(q => `
+                <div class="forum-card">
+                    <span class="badge ${q.isResolved ? 'badge-resolved' : 'badge-pending'}">${q.isResolved ? 'RESOLVED' : 'PENDING'}</span>
+                    <h4 style="margin: 10px 0">${q.title}</h4>
+                    <p>${q.content}</p>
+                    ${q.answers && q.answers.length > 0 ? q.answers.map(a => `<div style="margin-top:10px; padding:10px; background:#fff; border-radius:8px; border-left: 3px solid var(--secondary);"><strong>Expert Advice:</strong> ${a.content}</div>`).join('') : '<p style="margin-top:10px; font-size: 0.85rem; color: #9ca3af;">Awaiting expert response...</p>'}
+                </div>
+            `).reverse().slice(0, 5).join('');
+        }
+    } catch(err) { console.error(err); }
+
+    try {
+        const resC = await fetch(`${API_BASE}/crops`);
+        const dataC = await resC.json();
+        const overviewCrops = document.getElementById('overviewGuideTbody');
+        if (overviewCrops) {
+            const top20 = dataC.slice(0, 20);
+            overviewCrops.innerHTML = top20.length === 0 ? '<tr><td colspan="7" style="text-align:center; padding: 40px;">No crop guides available.</td></tr>' : top20.map(c => `
+                <tr>
+                    <td style="font-weight: bold; color: #64748b;">#${c.id}</td>
+                    <td style="font-weight: 800; color: var(--primary); font-size: 1.05rem;">☘️ ${c.name}</td>
+                    <td><span style="background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem;">${c.suitableSoilType}</span></td>
+                    <td><span style="background: #fffbeb; color: #92400e; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">${c.suitableSeason}</span></td>
+                    <td><span style="background: #ecfdf5; color: #065f46; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 700;">${c.growingDurationDays} Days</span></td>
+                    <td style="font-size: 0.9rem; color: #4b5563; max-width: 250px;">${c.description}</td>
+                    <td style="color: var(--secondary); font-weight: 700; font-size: 0.9rem; max-width: 300px;">${c.fullTexts || 'Standard planting guidelines.'}</td>
+                </tr>
+            `).join('');
+        }
+    } catch(err) { console.error(err); }
+}
+
 async function askQuestion() {
     const user = JSON.parse(localStorage.getItem('user'));
     const payload = {
@@ -428,8 +470,9 @@ function renderCropCards(crops) {
     const tbody = document.getElementById('guideTbody');
     if (!tbody) return;
     
-    tbody.innerHTML = crops.length === 0 ? '<tr><td colspan="6" style="text-align:center; padding: 40px;">No matching records found.</td></tr>' : crops.map(c => `
+    tbody.innerHTML = crops.length === 0 ? '<tr><td colspan="7" style="text-align:center; padding: 40px;">No matching records found.</td></tr>' : crops.map(c => `
         <tr>
+            <td style="font-weight: bold; color: #64748b;">#${c.id}</td>
             <td style="font-weight: 800; color: var(--primary); font-size: 1.05rem;">☘️ ${c.name}</td>
             <td><span style="background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem;">${c.suitableSoilType}</span></td>
             <td><span style="background: #fffbeb; color: #92400e; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">${c.suitableSeason}</span></td>

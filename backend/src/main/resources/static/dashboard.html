@@ -100,9 +100,39 @@
                     </div>
                 </div>
 
-                <div class="glass-card">
+                <div class="glass-card" id="systemOverviewCard">
                     <h2 class="section-title">System Intelligence Overview</h2>
                     <p style="color: #4b5563; line-height: 1.7;">Welcome to the Unified Command Center. This dashboard provides a concise overview of user distributions and system health. You can manage personnel, update the crop knowledge base, and perform system-level maintenance from the side navigation.</p>
+                </div>
+
+                <!-- Farmer Dashboard specific section -->
+                <div id="farmerDashboard" style="display:none">
+                    <div class="glass-card" style="margin-bottom: 30px;">
+                        <h2 class="section-title">Responses from Agronomist</h2>
+                        <div id="overviewMyQuestions"></div>
+                    </div>
+                    
+                    <div class="glass-card">
+                        <h2 class="section-title">Top 20 Crop Guides</h2>
+                        <div style="overflow-x: auto;">
+                            <table id="overviewCropTable">
+                                <thead>
+                                    <tr style="text-align: left; background: #f3f4f6;">
+                                        <th style="padding: 18px; border-radius: 16px 0 0 16px;">ID</th>
+                                        <th style="padding: 18px;">Crop Identity</th>
+                                        <th style="padding: 18px;">Soil Compatibility</th>
+                                        <th style="padding: 18px;">Optimal Season</th>
+                                        <th style="padding: 18px;">Duration</th>
+                                        <th style="padding: 18px;">General Insights</th>
+                                        <th style="padding: 18px; border-radius: 0 16px 16px 0;">Farming Guide (Full Text)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="overviewGuideTbody">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -218,7 +248,8 @@
                         <table id="cropTable">
                             <thead>
                                 <tr style="text-align: left; background: #f3f4f6;">
-                                    <th style="padding: 18px; border-radius: 16px 0 0 16px;">Crop Identity</th>
+                                    <th style="padding: 18px; border-radius: 16px 0 0 16px;">ID</th>
+                                    <th style="padding: 18px;">Crop Identity</th>
                                     <th style="padding: 18px;">Soil Compatibility</th>
                                     <th style="padding: 18px;">Optimal Season</th>
                                     <th style="padding: 18px;">Duration</th>
