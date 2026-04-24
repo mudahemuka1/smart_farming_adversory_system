@@ -361,12 +361,12 @@ async function fetchUsers() {
     document.getElementById('userTbody').innerHTML = data.map(u => `
         <tr>
             <td style="padding: 15px;">
-                <div style="font-weight: 700;">${u.name || 'Individual'}</div>
+                <div style="font-weight: 700;">${u.fullName || u.companyName || 'System User'}</div>
                 <div style="font-size: 0.75rem; color: #64748b;">Joined ${new Date(u.createdAt).toLocaleDateString()}</div>
             </td>
             <td style="padding: 15px;">${u.email}</td>
             <td style="padding: 15px;"><span class="badge" style="background:#f1f5f9; color:#475569;">${u.role}</span></td>
-            <td style="padding: 15px;"><span class="badge ${u.isVerified ? 'badge-resolved' : 'badge-pending'}">${u.isVerified ? 'VERIFIED' : 'PENDING'}</span></td>
+            <td style="padding: 15px;"><span class="badge ${u.verified ? 'badge-resolved' : 'badge-pending'}">${u.verified ? 'VERIFIED' : 'PENDING'}</span></td>
             <td style="padding: 15px;">
                 <span style="font-size: 0.85rem; color: #4b5563;">
                     ${u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString() : '<span style="color:#94a3b8">Never</span>'}
@@ -382,7 +382,7 @@ async function fetchUsers() {
 function prepareUpdateModal(u) {
     document.getElementById('updateId').value = u.id;
     document.getElementById('updateEmail').textContent = u.email;
-    document.getElementById('updateVerify').value = u.isVerified.toString();
+    document.getElementById('updateVerify').value = u.verified.toString();
     document.getElementById('updateRole').value = u.role;
     document.getElementById('updateModal').style.display = 'flex';
 }
