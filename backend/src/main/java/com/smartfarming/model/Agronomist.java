@@ -25,4 +25,7 @@ public class Agronomist extends User {
 
     @Column(name = "contact_number")
     private String contactNumber;
+
+    @jakarta.persistence.OneToMany(mappedBy = "agronomist", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Answer> answers;
 }

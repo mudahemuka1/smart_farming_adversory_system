@@ -59,6 +59,18 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
     
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        
+        user.setVerified(userDetails.isVerified());
+        user.setRole(userDetails.getRole());
+        
+        return ResponseEntity.ok(userRepository.save(user));
+    }
+
     @PutMapping("/{id}/verify")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> verifyUser(@PathVariable Long id) {

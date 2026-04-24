@@ -391,7 +391,7 @@ async function commitUserUpdate() {
     const id = document.getElementById('updateId').value;
     const user = JSON.parse(localStorage.getItem('user'));
     const payload = {
-        isVerified: document.getElementById('updateVerify').value,
+        verified: document.getElementById('updateVerify').value === 'true',
         role: document.getElementById('updateRole').value
     };
 
