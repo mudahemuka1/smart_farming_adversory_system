@@ -61,12 +61,16 @@ public class UserController {
     
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody java.util.Map<String, Object> payload) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         
-        user.setVerified(userDetails.isVerified());
-        user.setRole(userDetails.getRole());
+        if (payload.containsKey("verified")) {
+            user.setVerified((Boolean) payload.get("verified"));
+        }
+        if (payload.containsKey("role")) {
+            user.setRole(Role.valueOf((String) payload.get("role")));
+        }
         
         return ResponseEntity.ok(userRepository.save(user));
     }
