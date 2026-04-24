@@ -205,8 +205,6 @@
                     <button class="btn-action" onclick="getRecommendations()">ANALYZE PARAMETERS</button>
                     <div id="recResults"></div>
                 </div>
-            </div>
-
             <div id="dealer-dashboard" class="section">
                 <div class="glass-card">
                     <h2 class="section-title">Institutional Business Profile</h2>
@@ -225,6 +223,38 @@
                             <tbody id="dealerSpecificTbody">
                                 <!-- Populated via JS -->
                             </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="section-title">Fertilizer Inventory Management</h2>
+                    <input type="hidden" id="dealerFertilizerId">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+                        <input id="dfName" placeholder="Fertilizer Name">
+                        <input id="dfType" placeholder="Type (e.g. NPK)">
+                        <input id="dfStock" type="number" placeholder="Stock (Bags)">
+                        <input id="dfPrice" type="number" placeholder="Price per Bag">
+                        <textarea id="dfCrops" placeholder="Recommended Crops" style="grid-column: span 2"></textarea>
+                        <textarea id="dfInstructions" placeholder="Instructions" style="grid-column: span 2"></textarea>
+                    </div>
+                    <div style="display:flex; gap:10px">
+                        <button class="btn-action" id="btnSaveDealerFert" onclick="handleDealerFertilizerCommit()">SAVE FERTILIZER DATA</button>
+                        <button class="btn-logout" id="btnCancelDealerFertEdit" style="display:none; background:#f1f5f9; color:#64748b" onclick="cancelDealerFertEdit()">CANCEL</button>
+                    </div>
+                    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr style="text-align: left; color: var(--primary);">
+                                    <th>FERTILIZER</th>
+                                    <th>TYPE</th>
+                                    <th>STOCK (BAGS)</th>
+                                    <th>PRICE (RWF)</th>
+                                    <th style="text-align: right;">OPERATIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dealerFertilizerTbody"></tbody>
                         </table>
                     </div>
                 </div>
@@ -336,15 +366,95 @@
 
             <div id="manage-data" class="section">
                 <div class="glass-card">
-                    <h2 class="section-title">Knowledge Base Entry</h2>
+                    <h2 class="section-title">Knowledge Base Entry (Crops)</h2>
+                    <input type="hidden" id="editCropId">
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
                         <input id="cName" placeholder="Crop Name"><input id="cSoil" placeholder="Soil Type">
                         <input id="cSeason" placeholder="Season"><input id="cDays" placeholder="Growth Days">
+                        <textarea id="cDesc" placeholder="Description" style="grid-column: span 2"></textarea>
                     </div>
-                    <button class="btn-action" onclick="handleAddCrop()">COMMIT DATA</button>
+                    <div style="display:flex; gap:10px">
+                        <button class="btn-action" id="btnSaveCrop" onclick="handleCropCommit()">COMMIT CROP DATA</button>
+                        <button class="btn-logout" id="btnCancelCropEdit" style="display:none; background:#f1f5f9; color:#64748b" onclick="cancelCropEdit()">CANCEL</button>
+                    </div>
                 </div>
-                <input type="text" id="cropFilter" placeholder="Filter rules..." onkeyup="filterTable('cropFilter', 'cropTbody')" style="margin-bottom: 10px;">
-                <table><thead><tr><th>CROP</th><th>SOIL</th><th>SEASON</th></tr></thead><tbody id="cropTbody"></tbody></table>
+                <div class="glass-card">
+                    <h2 class="section-title">Active Crop Library</h2>
+                    <input type="text" id="cropFilter" placeholder="Filter crops..." onkeyup="filterTable('cropFilter', 'cropTbody')" style="margin-bottom: 20px;">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr style="text-align: left; color: var(--primary);">
+                                    <th>CROP</th>
+                                    <th>SOIL</th>
+                                    <th>SEASON</th>
+                                    <th>DAYS</th>
+                                    <th style="text-align: right;">OPERATIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cropTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="section-title">Disease Management</h2>
+                    <input type="hidden" id="editDiseaseId">
+                    <div style="display:grid; grid-template-columns: 1fr; gap:15px; margin-bottom:15px;">
+                        <input id="dName" placeholder="Disease Name">
+                        <textarea id="dSymptoms" placeholder="Symptoms"></textarea>
+                        <textarea id="dTreatment" placeholder="Treatment Suggestions"></textarea>
+                    </div>
+                    <div style="display:flex; gap:10px">
+                        <button class="btn-action" id="btnSaveDisease" onclick="handleDiseaseCommit()">SAVE DISEASE DATA</button>
+                        <button class="btn-logout" id="btnCancelDiseaseEdit" style="display:none; background:#f1f5f9; color:#64748b" onclick="cancelDiseaseEdit()">CANCEL</button>
+                    </div>
+                    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr style="text-align: left; color: var(--primary);">
+                                    <th>DISEASE</th>
+                                    <th>SYMPTOMS</th>
+                                    <th style="text-align: right;">OPERATIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="diseaseTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="section-title">Fertilizer Management</h2>
+                    <input type="hidden" id="editFertilizerId">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+                        <input id="fName" placeholder="Fertilizer Name">
+                        <input id="fType" placeholder="Type (e.g. NPK)">
+                        <input id="fStock" type="number" placeholder="Stock (Bags)">
+                        <input id="fPrice" type="number" placeholder="Price per Bag">
+                        <textarea id="fCrops" placeholder="Recommended Crops" style="grid-column: span 2"></textarea>
+                        <textarea id="fInstructions" placeholder="Instructions" style="grid-column: span 2"></textarea>
+                    </div>
+                    <div style="display:flex; gap:10px">
+                        <button class="btn-action" id="btnSaveFertilizer" onclick="handleFertilizerCommit()">SAVE FERTILIZER DATA</button>
+                        <button class="btn-logout" id="btnCancelFertilizerEdit" style="display:none; background:#f1f5f9; color:#64748b" onclick="cancelFertilizerEdit()">CANCEL</button>
+                    </div>
+                    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr style="text-align: left; color: var(--primary);">
+                                    <th>FERTILIZER</th>
+                                    <th>TYPE</th>
+                                    <th>STOCK</th>
+                                    <th>PRICE</th>
+                                    <th style="text-align: right;">OPERATIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fertilizerTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <div id="settings" class="section">

@@ -44,4 +44,18 @@ public class QuestionController {
             @Valid @RequestBody AnswerRequest request) {
         return ResponseEntity.ok(questionService.answerQuestion(questionId, request.getAgronomistId(), request.getContent()));
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteQuestion(@PathVariable Long id) {
+        questionService.deleteQuestion(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/answers/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteAnswer(@PathVariable Long id) {
+        questionService.deleteAnswer(id);
+        return ResponseEntity.ok().build();
+    }
 }

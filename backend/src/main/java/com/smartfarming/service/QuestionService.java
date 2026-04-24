@@ -60,4 +60,12 @@ public class QuestionService {
     public List<Question> getFarmerQuestions(Long farmerId) {
         return questionRepository.findByFarmer_Id(farmerId);
     }
+
+    public void deleteQuestion(Long questionId) {
+        questionRepository.deleteById(questionId);
+    }
+
+    public void deleteAnswer(Long answerId) {
+        answerRepository.deleteById(answerId);
+    }
 }

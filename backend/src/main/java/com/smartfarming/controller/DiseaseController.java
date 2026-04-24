@@ -32,6 +32,28 @@ public class DiseaseController {
         return diseaseRepository.save(disease);
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('AGRONOMIST')")
+    public ResponseEntity<Disease> updateDisease(@PathVariable Long id, @RequestBody Disease diseaseDetails) {
+        Disease disease = diseaseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Disease not found with id: " + id));
+        
+        disease.setName(diseaseDetails.getName());
+        disease.setSymptoms(diseaseDetails.getSymptoms());
+        disease.setTreatmentSuggestions(diseaseDetails.getTreatmentSuggestions());
+        
+        return ResponseEntity.ok(diseaseRepository.save(disease));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteDisease(@PathVariable Long id) {
+        Disease disease = diseaseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Disease not found with id: " + id));
+        diseaseRepository.delete(disease);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/search")
     public ResponseEntity<List<Disease>> searchBySymptoms(@RequestParam String symptoms) {
         return ResponseEntity.ok(recommendationService.searchDiseaseBySymptoms(symptoms));

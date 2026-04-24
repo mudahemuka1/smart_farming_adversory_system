@@ -33,6 +33,31 @@ public class CropController {
         return cropRepository.save(crop);
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Crop> updateCrop(@PathVariable Long id, @RequestBody Crop cropDetails) {
+        Crop crop = cropRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Crop not found with id: " + id));
+        
+        crop.setName(cropDetails.getName());
+        crop.setSuitableSoilType(cropDetails.getSuitableSoilType());
+        crop.setSuitableSeason(cropDetails.getSuitableSeason());
+        crop.setGrowingDurationDays(cropDetails.getGrowingDurationDays());
+        crop.setDescription(cropDetails.getDescription());
+        crop.setFullTexts(cropDetails.getFullTexts());
+        
+        return ResponseEntity.ok(cropRepository.save(crop));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteCrop(@PathVariable Long id) {
+        Crop crop = cropRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Crop not found with id: " + id));
+        cropRepository.delete(crop);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/recommend")
     public ResponseEntity<List<Crop>> getRecommendedCrops(
             @RequestParam String soil,

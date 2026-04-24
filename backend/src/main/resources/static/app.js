@@ -148,7 +148,7 @@ function showSection(id) {
         }
     });
 
-    if (id === 'manage-data') fetchHistory();
+    if (id === 'manage-data') { fetchCrops(); fetchDiseases(); fetchFertilizers(); }
     if (id === 'expert-answering') fetchPendingQuestions();
     if (id === 'dealers') fetchAgroDealers();
     if (id === 'crop-guide') fetchCropGuide();
@@ -253,6 +253,22 @@ async function fetchDealerProfile() {
                     <td style="color:var(--secondary); font-weight:600;">${profile.fullTexts || 'Expert guidance not yet configured.'}</td>
                 </tr>
             `;
+            
+            // Also fetch fertilizers for this dealer (assuming they manage all or just view all for now)
+            // The user request said "agrodialler help do that", suggesting they should manage them.
+            const fertRes = await fetch(`${API_BASE}/fertilizers`);
+            const ferts = await fertRes.json();
+            document.getElementById('dealerFertilizerTbody').innerHTML = ferts.map(f => `
+                <tr>
+                    <td style="font-weight:700">${f.name}</td>
+                    <td>${f.type}</td>
+                    <td>${f.stockBags}</td>
+                    <td>RWF ${f.pricePerBag}</td>
+                    <td style="text-align: right;">
+                        <button class="btn-action" style="padding: 4px 8px; font-size: 0.7rem; background: var(--secondary);" onclick='editFertilizer(${JSON.stringify(f)})'>Edit</button>
+                        <button class="btn-logout" style="padding: 4px 8px; font-size: 0.7rem; margin:0;" onclick="deleteFertilizer(${f.id})">Del</button>
+                    </td>
+                </tr>`).join('');
         }
     } catch (err) { console.error(err); }
 }
@@ -340,7 +356,7 @@ async function handleRegister() {
 
 async function fetchUsers() {
     const user = JSON.parse(localStorage.getItem('user'));
-    const res = await fetch(`${API_BASE}/auth/users`, { headers: { 'Authorization': `Bearer ${user.token}` } });
+    const res = await fetch(`${API_BASE}/users`, { headers: { 'Authorization': `Bearer ${user.token}` } });
     const data = await res.json();
     document.getElementById('userTbody').innerHTML = data.map(u => `
         <tr>
@@ -379,7 +395,7 @@ async function commitUserUpdate() {
         role: document.getElementById('updateRole').value
     };
 
-    const res = await fetch(`${API_BASE}/auth/users/${id}`, {
+    const res = await fetch(`${API_BASE}/users/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}` },
         body: JSON.stringify(payload)
@@ -437,7 +453,7 @@ async function fetchGlobalStats() {
 async function deleteUser(id) {
     if (!confirm('Are you sure you want to remove this user?')) return;
     const user = JSON.parse(localStorage.getItem('user'));
-    const res = await fetch(`${API_BASE}/auth/users/${id}`, { 
+    const res = await fetch(`${API_BASE}/users/${id}`, { 
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${user.token}` }
     });
@@ -449,10 +465,262 @@ async function deleteUser(id) {
     }
 }
 
-async function fetchHistory() {
+async function fetchCrops() {
     const res = await fetch(`${API_BASE}/crops`);
     const data = await res.json();
-    document.getElementById('cropTbody').innerHTML = data.map(c => `<tr><td>${c.name}</td><td>${c.suitableSoilType}</td><td>${c.suitableSeason}</td></tr>`).join('');
+    document.getElementById('cropTbody').innerHTML = data.map(c => `
+        <tr>
+            <td style="font-weight:700">${c.name}</td>
+            <td>${c.suitableSoilType}</td>
+            <td>${c.suitableSeason}</td>
+            <td>${c.growingDurationDays}</td>
+            <td style="text-align: right;">
+                <button class="btn-action" style="padding: 4px 8px; font-size: 0.7rem; background: var(--secondary);" onclick='editCrop(${JSON.stringify(c)})'>Edit</button>
+                <button class="btn-logout" style="padding: 4px 8px; font-size: 0.7rem; margin:0;" onclick="deleteCrop(${c.id})">Del</button>
+            </td>
+        </tr>`).join('');
+}
+
+function editCrop(c) {
+    document.getElementById('editCropId').value = c.id;
+    document.getElementById('cName').value = c.name;
+    document.getElementById('cSoil').value = c.suitableSoilType;
+    document.getElementById('cSeason').value = c.suitableSeason;
+    document.getElementById('cDays').value = c.growingDurationDays;
+    document.getElementById('cDesc').value = c.description;
+    document.getElementById('btnSaveCrop').textContent = 'UPDATE CROP DATA';
+    document.getElementById('btnCancelCropEdit').style.display = 'block';
+}
+
+function cancelCropEdit() {
+    document.getElementById('editCropId').value = '';
+    document.getElementById('cName').value = '';
+    document.getElementById('cSoil').value = '';
+    document.getElementById('cSeason').value = '';
+    document.getElementById('cDays').value = '';
+    document.getElementById('cDesc').value = '';
+    document.getElementById('btnSaveCrop').textContent = 'COMMIT CROP DATA';
+    document.getElementById('btnCancelCropEdit').style.display = 'none';
+}
+
+async function handleCropCommit() {
+    const id = document.getElementById('editCropId').value;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const payload = {
+        name: document.getElementById('cName').value,
+        suitableSoilType: document.getElementById('cSoil').value,
+        suitableSeason: document.getElementById('cSeason').value,
+        growingDurationDays: document.getElementById('cDays').value,
+        description: document.getElementById('cDesc').value
+    };
+
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? `${API_BASE}/crops/${id}` : `${API_BASE}/crops`;
+
+    const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}` },
+        body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+        alert(id ? 'Crop updated.' : 'Crop added.');
+        cancelCropEdit();
+        fetchCrops();
+    } else { alert('Error saving crop.'); }
+}
+
+async function deleteCrop(id) {
+    if (!confirm('Delete this crop?')) return;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const res = await fetch(`${API_BASE}/crops/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${user.token}` }
+    });
+    if (res.ok) fetchCrops();
+}
+
+// --- Disease CRUD ---
+async function fetchDiseases() {
+    const res = await fetch(`${API_BASE}/diseases`);
+    const data = await res.json();
+    document.getElementById('diseaseTbody').innerHTML = data.map(d => `
+        <tr>
+            <td style="font-weight:700">${d.name}</td>
+            <td style="font-size:0.8rem; max-width:200px;">${d.symptoms}</td>
+            <td style="text-align: right;">
+                <button class="btn-action" style="padding: 4px 8px; font-size: 0.7rem; background: var(--secondary);" onclick='editDisease(${JSON.stringify(d)})'>Edit</button>
+                <button class="btn-logout" style="padding: 4px 8px; font-size: 0.7rem; margin:0;" onclick="deleteDisease(${d.id})">Del</button>
+            </td>
+        </tr>`).join('');
+}
+
+function editDisease(d) {
+    document.getElementById('editDiseaseId').value = d.id;
+    document.getElementById('dName').value = d.name;
+    document.getElementById('dSymptoms').value = d.symptoms;
+    document.getElementById('dTreatment').value = d.treatmentSuggestions;
+    document.getElementById('btnSaveDisease').textContent = 'UPDATE DISEASE DATA';
+    document.getElementById('btnCancelDiseaseEdit').style.display = 'block';
+}
+
+function cancelDiseaseEdit() {
+    document.getElementById('editDiseaseId').value = '';
+    document.getElementById('dName').value = '';
+    document.getElementById('dSymptoms').value = '';
+    document.getElementById('dTreatment').value = '';
+    document.getElementById('btnSaveDisease').textContent = 'SAVE DISEASE DATA';
+    document.getElementById('btnCancelDiseaseEdit').style.display = 'none';
+}
+
+async function handleDiseaseCommit() {
+    const id = document.getElementById('editDiseaseId').value;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const payload = {
+        name: document.getElementById('dName').value,
+        symptoms: document.getElementById('dSymptoms').value,
+        treatmentSuggestions: document.getElementById('dTreatment').value
+    };
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? `${API_BASE}/diseases/${id}` : `${API_BASE}/diseases`;
+    const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}` },
+        body: JSON.stringify(payload)
+    });
+    if (res.ok) { alert('Disease saved.'); cancelDiseaseEdit(); fetchDiseases(); }
+}
+
+async function deleteDisease(id) {
+    if (!confirm('Delete this disease?')) return;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const res = await fetch(`${API_BASE}/diseases/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${user.token}` }
+    });
+    if (res.ok) fetchDiseases();
+}
+
+// --- Fertilizer CRUD ---
+async function fetchFertilizers() {
+    const res = await fetch(`${API_BASE}/fertilizers`);
+    const data = await res.json();
+    document.getElementById('fertilizerTbody').innerHTML = data.map(f => `
+        <tr>
+            <td style="font-weight:700">${f.name}</td>
+            <td>${f.type}</td>
+            <td>${f.stockBags}</td>
+            <td>RWF ${f.pricePerBag}</td>
+            <td style="text-align: right;">
+                <button class="btn-action" style="padding: 4px 8px; font-size: 0.7rem; background: var(--secondary);" onclick='editFertilizer(${JSON.stringify(f)})'>Edit</button>
+                <button class="btn-logout" style="padding: 4px 8px; font-size: 0.7rem; margin:0;" onclick="deleteFertilizer(${f.id})">Del</button>
+            </td>
+        </tr>`).join('');
+}
+
+function editFertilizer(f) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user.role === 'ADMIN') {
+        document.getElementById('editFertilizerId').value = f.id;
+        document.getElementById('fName').value = f.name;
+        document.getElementById('fType').value = f.type;
+        document.getElementById('fStock').value = f.stockBags;
+        document.getElementById('fPrice').value = f.pricePerBag;
+        document.getElementById('fCrops').value = f.recommendedCrops;
+        document.getElementById('fInstructions').value = f.applicationInstructions;
+        document.getElementById('btnSaveFertilizer').textContent = 'UPDATE FERTILIZER DATA';
+        document.getElementById('btnCancelFertilizerEdit').style.display = 'block';
+    } else if (user.role === 'AGRO_DEALER') {
+        document.getElementById('dealerFertilizerId').value = f.id;
+        document.getElementById('dfName').value = f.name;
+        document.getElementById('dfType').value = f.type;
+        document.getElementById('dfStock').value = f.stockBags;
+        document.getElementById('dfPrice').value = f.pricePerBag;
+        document.getElementById('dfCrops').value = f.recommendedCrops;
+        document.getElementById('dfInstructions').value = f.applicationInstructions;
+        document.getElementById('btnSaveDealerFert').textContent = 'UPDATE FERTILIZER DATA';
+        document.getElementById('btnCancelDealerFertEdit').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function cancelFertilizerEdit() {
+    document.getElementById('editFertilizerId').value = '';
+    document.getElementById('fName').value = '';
+    document.getElementById('fType').value = '';
+    document.getElementById('fStock').value = '';
+    document.getElementById('fPrice').value = '';
+    document.getElementById('fCrops').value = '';
+    document.getElementById('fInstructions').value = '';
+    document.getElementById('btnSaveFertilizer').textContent = 'SAVE FERTILIZER DATA';
+    document.getElementById('btnCancelFertilizerEdit').style.display = 'none';
+}
+
+function cancelDealerFertEdit() {
+    document.getElementById('dealerFertilizerId').value = '';
+    document.getElementById('dfName').value = '';
+    document.getElementById('dfType').value = '';
+    document.getElementById('dfStock').value = '';
+    document.getElementById('dfPrice').value = '';
+    document.getElementById('dfCrops').value = '';
+    document.getElementById('dfInstructions').value = '';
+    document.getElementById('btnSaveDealerFert').textContent = 'SAVE FERTILIZER DATA';
+    document.getElementById('btnCancelDealerFertEdit').style.display = 'none';
+}
+
+async function handleFertilizerCommit() {
+    const id = document.getElementById('editFertilizerId').value;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const payload = {
+        name: document.getElementById('fName').value,
+        type: document.getElementById('fType').value,
+        stockBags: document.getElementById('fStock').value,
+        pricePerBag: document.getElementById('fPrice').value,
+        recommendedCrops: document.getElementById('fCrops').value,
+        applicationInstructions: document.getElementById('fInstructions').value
+    };
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? `${API_BASE}/fertilizers/${id}` : `${API_BASE}/fertilizers`;
+    const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}` },
+        body: JSON.stringify(payload)
+    });
+    if (res.ok) { alert('Fertilizer saved.'); cancelFertilizerEdit(); fetchFertilizers(); }
+}
+
+async function handleDealerFertilizerCommit() {
+    const id = document.getElementById('dealerFertilizerId').value;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const payload = {
+        name: document.getElementById('dfName').value,
+        type: document.getElementById('dfType').value,
+        stockBags: document.getElementById('dfStock').value,
+        pricePerBag: document.getElementById('dfPrice').value,
+        recommendedCrops: document.getElementById('dfCrops').value,
+        applicationInstructions: document.getElementById('dfInstructions').value
+    };
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? `${API_BASE}/fertilizers/${id}` : `${API_BASE}/fertilizers`;
+    const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}` },
+        body: JSON.stringify(payload)
+    });
+    if (res.ok) { alert('Inventory updated.'); cancelDealerFertEdit(); fetchDealerProfile(); }
+}
+
+async function deleteFertilizer(id) {
+    if (!confirm('Delete this fertilizer?')) return;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const res = await fetch(`${API_BASE}/fertilizers/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${user.token}` }
+    });
+    if (res.ok) {
+        if (user.role === 'ADMIN') fetchFertilizers();
+        else fetchDealerProfile();
+    }
 }
 
 async function fetchCropGuide() {

@@ -39,14 +39,26 @@ public class FertilizerController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('AGRO_DEALER')")
-    public ResponseEntity<Fertilizer> updateStock(
-            @PathVariable Long id,
-            @RequestParam Integer stock,
-            @RequestParam Double price) {
-        Fertilizer f = fertilizerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Fertilizer not found"));
-        f.setStockBags(stock);
-        f.setPricePerBag(price);
-        return ResponseEntity.ok(fertilizerRepository.save(f));
+    public ResponseEntity<Fertilizer> updateFertilizer(@PathVariable Long id, @RequestBody Fertilizer fertilizerDetails) {
+        Fertilizer fertilizer = fertilizerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Fertilizer not found with id: " + id));
+        
+        fertilizer.setName(fertilizerDetails.getName());
+        fertilizer.setType(fertilizerDetails.getType());
+        fertilizer.setRecommendedCrops(fertilizerDetails.getRecommendedCrops());
+        fertilizer.setApplicationInstructions(fertilizerDetails.getApplicationInstructions());
+        fertilizer.setStockBags(fertilizerDetails.getStockBags());
+        fertilizer.setPricePerBag(fertilizerDetails.getPricePerBag());
+        
+        return ResponseEntity.ok(fertilizerRepository.save(fertilizer));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('AGRO_DEALER')")
+    public ResponseEntity<?> deleteFertilizer(@PathVariable Long id) {
+        Fertilizer fertilizer = fertilizerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Fertilizer not found with id: " + id));
+        fertilizerRepository.delete(fertilizer);
+        return ResponseEntity.ok().build();
     }
 }
