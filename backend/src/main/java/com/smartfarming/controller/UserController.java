@@ -66,13 +66,15 @@ public class UserController {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         
         if (payload.containsKey("verified")) {
-            user.setVerified((Boolean) payload.get("verified"));
+            boolean isVer = Boolean.parseBoolean(payload.get("verified").toString());
+            user.setVerified(isVer);
         }
         if (payload.containsKey("role")) {
-            user.setRole(Role.valueOf((String) payload.get("role")));
+            user.setRole(Role.valueOf(payload.get("role").toString()));
         }
         
-        return ResponseEntity.ok(userRepository.save(user));
+        User updated = userRepository.save(user);
+        return ResponseEntity.ok(updated);
     }
 
     @PutMapping("/{id}/verify")
