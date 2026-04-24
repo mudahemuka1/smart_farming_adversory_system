@@ -482,40 +482,42 @@
                     </div>
                 </div>
 
-                <!-- Update User Modal -->
-                <div id="updateModal" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-                    <div class="glass-card" style="width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
-                        <h3 style="margin-bottom: 20px; color: var(--primary);">Update User Privileges</h3>
-                        <input type="hidden" id="updateId">
-                        <div style="background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 5px;">Managing Account:</p>
-                            <p id="updateEmail" style="font-weight: 700; color: #1e293b;"></p>
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px;">Verification Status</label>
-                            <select id="updateVerify">
-                                <option value="true">VERIFIED</option>
-                                <option value="false">NOT VERIFIED</option>
-                            </select>
-                        </div>
-                        
-                        <div style="margin-bottom: 25px;">
-                            <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px;">Privilege Level (Role)</label>
-                            <select id="updateRole">
-                                <option value="FARMER">FARMER</option>
-                                <option value="AGRONOMIST">AGRONOMIST</option>
-                                <option value="AGRO_DEALER">AGRO DEALER</option>
-                                <option value="ADMIN">ADMINISTRATOR</option>
-                            </select>
-                        </div>
-
-                        <div style="display:flex; gap:12px">
-                            <button class="btn-action" style="flex:1" onclick="commitUserUpdate()">SAVE MODIFICATIONS</button>
-                            <button class="btn-logout" style="flex:1; background: #f1f5f9; color: #64748b;" onclick="document.getElementById('updateModal').style.display='none'">DISMISS</button>
-                        </div>
-                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update User Modal -->
+    <div id="updateModal" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div class="glass-card" style="width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
+            <h3 style="margin-bottom: 20px; color: var(--primary);">Update User Privileges</h3>
+            <input type="hidden" id="updateId">
+            <div style="background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 5px;">Managing Account:</p>
+                <p id="updateEmail" style="font-weight: 700; color: #1e293b;"></p>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px;">Verification Status</label>
+                <select id="updateVerify">
+                    <option value="true">VERIFIED</option>
+                    <option value="false">NOT VERIFIED</option>
+                </select>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px;">Privilege Level (Role)</label>
+                <select id="updateRole">
+                    <option value="FARMER">FARMER</option>
+                    <option value="AGRONOMIST">AGRONOMIST</option>
+                    <option value="AGRO_DEALER">AGRO DEALER</option>
+                    <option value="ADMIN">ADMINISTRATOR</option>
+                </select>
+            </div>
+
+            <div style="display:flex; gap:12px">
+                <button class="btn-action" style="flex:1" onclick="commitUserUpdate()">SAVE MODIFICATIONS</button>
+                <button class="btn-logout" style="flex:1; background: #f1f5f9; color: #64748b;" onclick="document.getElementById('updateModal').style.display='none'">DISMISS</button>
             </div>
         </div>
     </div>
